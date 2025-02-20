@@ -1,0 +1,13 @@
+# Ignore all .o object files (compiled files)
+*.o
+
+# Ignore the compiled shell executable
+my_shell
+
+# Ignore any backup or temporary files
+*.swp
+*.swo
+*~
+
+# Ignore compiled binaries if using a bin/ directory
+bin/

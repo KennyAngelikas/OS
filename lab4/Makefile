@@ -1,31 +1,37 @@
-# Compiler 
+# Compiler
 CC = gcc
 
-# Compiler flags
+# Compiler flags: compile only
 CFLAGS = -c
 
-# Files 
-SRC = my_shell.c my_fgets.c exe_cmd.c 
-OBJ = my_shell.o my_fgets.o exe_cmd.o 
+# Directory for object files
+OBJ_DIR = bin
+
+# Source files
+SRC = my_shell.c my_fgets.c exe_cmd.c builtin.c tokenizer.c
+
+# Automatically generate object file names in the bin/ folder
+OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
+
+# Target executable
 TARGET = my_shell
 
-# Default target (compiles everything)
+# Default target: build the executable
 all: $(TARGET)
 
-# Compile source files into object files
-my_shell.o: my_shell.c my_fgets.h exe_cmd.h
-	$(CC) $(CFLAGS) my_shell.c -o my_shell.o
-
-my_fgets.o: my_fgets.c my_fgets.h
-	$(CC) $(CFLAGS) my_fgets.c -o my_fgets.o
-
-exe_cmd.o: exe_cmd.c exe_cmd.h
-	$(CC) $(CFLAGS) exe_cmd.c -o exe_cmd.o
-
-# Link object files into the final executable
-$(TARGET) : $(OBJ)
+# Link object files to produce the executable
+$(TARGET): $(OBJ)
 	$(CC) $(OBJ) -o $(TARGET)
 
-# Clean up object files
+# Pattern rule: compile .c files to .o files in bin/
+$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $< -o $@
+
+# Ensure the object directory exists
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+# Clean up generated files
+.PHONY: clean
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -rf $(OBJ_DIR) $(TARGET)
