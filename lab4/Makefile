@@ -8,7 +8,7 @@ CFLAGS = -c
 OBJ_DIR = bin
 
 # Source files
-SRC = my_shell.c my_fgets.c exe_cmd.c builtin.c tokenizer.c pipe_handler.c
+SRC = my_shell.c my_fgets.c exe_cmd.c builtin.c tokenizer.c pipe_handler.c redirection.c
 
 # Automatically generate object file names in the bin/ folder
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)

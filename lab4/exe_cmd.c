@@ -3,10 +3,12 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 #include "exe_cmd.h"
 #include "builtin.h"
 #include "tokenizer.h"
 #include "pipe_handler.h"
+#include "redirection.h"
 
 void exe_cmd(char *input) {
     char *args[100];
@@ -31,21 +33,38 @@ void exe_cmd(char *input) {
         return;
     }
 
+    // Call the redirection function to check for output redirection.
+    char *outfile = check_redirection(args, arg_count);
+
     // Check for built-in commands
     if (builtin(args)) {
         return;  // If built-in, execute and return (no forking)
     }
 
     // Fork a child process for external commands
-    pid_t pid = fork();
 
+    // Fork for external commands.
+    pid_t pid = fork();
     if (pid == 0) {  // Child process
+        if (outfile != NULL) {
+            int fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd < 0) {
+                perror("open");
+                exit(EXIT_FAILURE);
+            }
+            if (dup2(fd, STDOUT_FILENO) < 0) {  // Redirect stdout to file
+                perror("dup2");
+                exit(EXIT_FAILURE);
+            }
+            close(fd);
+        }
+
         execvp(args[0], args);
-        perror("Error executing command");  // If execvp fails
-        exit(1);
-    } else if (pid > 0) {  // Parent process
-        waitpid(pid, NULL, 0);  // Wait for child to finish
+        perror("execvp");
+        exit(EXIT_FAILURE);
+    } else if (pid < 0) {
+        perror("fork failed");
     } else {
-        perror("Fork failed");
+        waitpid(pid, NULL, 0);
     }
 }
