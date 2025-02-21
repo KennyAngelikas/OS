@@ -6,6 +6,7 @@
 #include "exe_cmd.h"
 #include "builtin.h"
 #include "tokenizer.h"
+#include "pipe_handler.h"
 
 void exe_cmd(char *input) {
     char *args[100];
@@ -15,6 +16,20 @@ void exe_cmd(char *input) {
     tokenize_input(input, args, &arg_count);
 
     if (args[0] == NULL) return;  // Ignore empty input, Base case
+
+    // Check for pipes
+    int pipe_index = -1;
+    for (int i = 0; i < arg_count; i++) {
+        if (strcmp(args[i], "|") == 0) {
+            pipe_index = i;
+            break;
+        }
+    }
+
+    if (pipe_index != -1) {
+        pipe_handler(args, pipe_index);
+        return;
+    }
 
     // Check for built-in commands
     if (builtin(args)) {
