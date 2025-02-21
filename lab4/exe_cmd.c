@@ -14,7 +14,7 @@ void exe_cmd(char *input) {
     // Use tokenizer to split input into arguments
     tokenize_input(input, args, &arg_count);
 
-    if (args[0] == NULL) return;  // Ignore empty input
+    if (args[0] == NULL) return;  // Ignore empty input, Base case
 
     // Check for built-in commands
     if (builtin(args)) {

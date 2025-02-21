@@ -4,7 +4,6 @@
 #include "my_fgets.h"
 #include "exe_cmd.h"  
 
-
 int main() {
     char *input = NULL;  // Pointer to store input
     size_t len = 0;  // Size of allocated memory
@@ -18,7 +17,7 @@ int main() {
             break;
         }
         
-        input[strcspn(input, "\n")] = '\0';
+        input[strcspn(input, "\n")] = '\0';  // remove newline bc getline() adds newline
 
         if (strlen(input) == 0) continue;  // Empty string base case, ignore
 
