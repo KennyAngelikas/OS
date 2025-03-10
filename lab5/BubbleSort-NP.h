@@ -1,5 +1,5 @@
 // Global Variable
-extern int SIZE = 5000;
+int SIZE = 100000;
 
 // Functions
 void fillArray(int *arr, int size);

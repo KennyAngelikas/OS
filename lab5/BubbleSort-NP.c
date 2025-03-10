@@ -9,7 +9,7 @@ int main(void) {
     double cpu_time_used;
 
     int nums[SIZE];
-    srand(time(NULL));
+    srand(42);
     fillArray(nums, SIZE);
 
     start = clock();

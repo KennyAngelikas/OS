@@ -8,11 +8,18 @@ int main(void) {
     clock_t start, end;
     double cpu_time_used;
 
-    int nums[SIZE];
-    srand(time(NULL));
+    int nums[SIZE], nums1[SIZE / 2], nums2[SIZE / 2];
+    srand(42);
     fillArray(nums, SIZE);
 
     start = clock();
+    partition(nums, SIZE, nums1, nums2);
+
+    bubbleSort(nums1, SIZE / 2);
+    bubbleSort(nums2, SIZE / 24);
+    
+    merge(nums, SIZE, nums1, nums2);
+    
     bubbleSort(nums, SIZE);
     end = clock();
 
@@ -27,6 +34,21 @@ int main(void) {
 void fillArray(int *arr, int size) {
     for (int i = 0; i < size; i++ ) {
         arr[i] = rand() % 10000; // maxval = 10000
+    }
+}
+
+void partition(int *nums, int size, int *nums1, int *nums2) {
+
+    for (int i = 0; i < size / 2; i++) {
+        nums1[i] = nums[i];
+        nums2[i] = nums[i + size / 2];   
+    }
+}
+
+void merge(int *nums, int size, int *nums1, int *nums2) {
+    for (int i = 0; i < size / 2; i++) {
+        nums[i] = nums1[i];
+        nums[i + size / 2] = nums2[i];
     }
 }
 
