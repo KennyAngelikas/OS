@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "exe_cmd.h": "c",
-        "wait.h": "c"
+        "wait.h": "c",
+        "typeinfo": "c"
     }
 }
